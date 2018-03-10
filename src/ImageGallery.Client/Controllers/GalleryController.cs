@@ -10,9 +10,11 @@ using ImageGallery.Model;
 using System.Net.Http;
 using System.IO;
 using ImageGallery.Client.Services;
+using Microsoft.AspNetCore.Http;
 
 namespace ImageGallery.Client.Controllers
 {
+    [Authorize]
     public class GalleryController : Controller
     {
         private readonly IImageGalleryHttpClient _imageGalleryHttpClient;
@@ -161,6 +163,15 @@ namespace ImageGallery.Client.Controllers
             }
 
             throw new Exception($"A problem happened while calling the API: {response.ReasonPhrase}");
-        }               
+        }
+    }
+
+    // https://app.pluralsight.com/player?course=asp-dotnet-core-oauth2-openid-connect-securing&author=kevin-dockx&name=asp-dotnet-core-oauth2-openid-connect-securing-m3&clip=2&mode=live
+    // at 8:50
+    // migrate: https://docs.microsoft.com/en-us/aspnet/core/migration/1x-to-2x/identity-2x#use-httpcontext-authentication-extensions
+
+    public async Task WriteOutIndentityInformation()
+    {
+        var identityToken = await HttpContext.Authentication()
     }
 }

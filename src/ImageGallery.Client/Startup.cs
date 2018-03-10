@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using ImageGallery.Client.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
 namespace ImageGallery.Client
 {
@@ -37,7 +38,23 @@ namespace ImageGallery.Client
             // register an IImageGalleryHttpClient
             services.AddScoped<IImageGalleryHttpClient, ImageGalleryHttpClient>();
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+            services.AddAuthentication(options => {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+            })
+                .AddCookie()
+                .AddOpenIdConnect(options =>
+                {
+                    options.Authority = "https://localhost:44389/";
+                    options.RequireHttpsMetadata = true;
+                    options.ClientId = "imagegalleryclient";
+                    options.Scope.Add("openid");
+                    options.Scope.Add("profile");
+                    options.ResponseType = "code id_token";
+                    //options.CallbackPath = new PathString("...");
+                    options.SignInScheme = "Cookies";
+                    options.SaveTokens = true;
+                });
 
         }
 
@@ -60,7 +77,10 @@ namespace ImageGallery.Client
                 app.UseExceptionHandler("/Shared/Error");
             }
 
-            app.UseOpenIdConnectAuthentication    
+            app.UseOpenIdConnectAuthentication(new OpenIdConnectOptions
+            {
+                Authority = "https://localhost:44389/"
+            });
 
             app.UseStaticFiles();
 
