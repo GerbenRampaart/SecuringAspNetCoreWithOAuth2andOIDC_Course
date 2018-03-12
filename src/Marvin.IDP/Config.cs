@@ -66,7 +66,12 @@ namespace Marvin.IDP
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile
-                    }
+                    },
+                    ClientSecrets =
+                    {
+                        new Secret("secret".Sha256())
+                    },
+                    AlwaysIncludeUserClaimsInIdToken = true
                 }
                 
             };

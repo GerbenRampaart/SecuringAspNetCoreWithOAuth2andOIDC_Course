@@ -6,7 +6,6 @@
     <AssemblyName>ImageGallery.Client</AssemblyName>
     <OutputType>Exe</OutputType>
     <PackageId>ImageGallery.Client</PackageId>
-    <RuntimeFrameworkVersion>2.0.3</RuntimeFrameworkVersion>
     <PackageTargetFallback>$(PackageTargetFallback);dotnet5.6;portable-net45+win8</PackageTargetFallback>
   </PropertyGroup>
 
@@ -22,7 +21,10 @@
 
   <ItemGroup>
     <PackageReference Include="BundlerMinifier.Core" Version="2.6.362" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Abstractions" Version="2.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Core" Version="2.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="2.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="2.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.2" />
