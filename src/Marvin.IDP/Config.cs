@@ -70,8 +70,8 @@ namespace Marvin.IDP
                     ClientSecrets =
                     {
                         new Secret("secret".Sha256())
-                    },
-                    AlwaysIncludeUserClaimsInIdToken = true
+                    }//,
+                    //AlwaysIncludeUserClaimsInIdToken = true
                 }
                 
             };
