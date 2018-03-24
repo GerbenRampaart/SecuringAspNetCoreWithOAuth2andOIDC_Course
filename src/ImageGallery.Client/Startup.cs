@@ -62,6 +62,8 @@ namespace ImageGallery.Client
                 options.Scope.Clear();
                 options.Scope.Add("openid");
                 options.Scope.Add("profile");
+                options.Scope.Add("address");
+                options.Scope.Add("roles");
 
                 options.ResponseType = "code id_token";
                 //options.CallbackPath = new PathString("...");
@@ -74,21 +76,21 @@ namespace ImageGallery.Client
                 {
                     OnTokenValidated = tokenValidatedContext =>
                     {
-                        var identity = tokenValidatedContext.Principal.Identity as ClaimsIdentity;
-                        var subjectClaim = identity.Claims.FirstOrDefault(z => z.Type == "sub");
+                        //var identity = tokenValidatedContext.Principal.Identity as ClaimsIdentity;
+                        //var subjectClaim = identity.Claims.FirstOrDefault(z => z.Type == "sub");
 
-                        // With help from:
-                        // https://app.pluralsight.com/library/courses/asp-dotnet-core-oauth2-openid-connect-securing/discussion
-                        var newClaimsIdentity = new ClaimsIdentity(
-                            tokenValidatedContext.Principal.Identity.AuthenticationType, // <-- I think this was the part that took me a while to get.
-                            "given_name",
-                            "role");
+                        //// With help from:
+                        //// https://app.pluralsight.com/library/courses/asp-dotnet-core-oauth2-openid-connect-securing/discussion
+                        //var newClaimsIdentity = new ClaimsIdentity(
+                        //    tokenValidatedContext.Principal.Identity.AuthenticationType, // <-- I think this was the part that took me a while to get.
+                        //    "given_name",
+                        //    "role");
 
-                        newClaimsIdentity.AddClaim(subjectClaim);
-                        // https://app.pluralsight.com/library/courses/asp-dotnet-core-oauth2-openid-connect-securing/discussion
+                        //newClaimsIdentity.AddClaim(subjectClaim);
+                        //// https://app.pluralsight.com/library/courses/asp-dotnet-core-oauth2-openid-connect-securing/discussion
 
-                        // https://github.com/fhrn71/IdentityServer4Demo/blob/master/ImageGallery.Client/Startup.cs
-                        tokenValidatedContext.Principal = new ClaimsPrincipal(newClaimsIdentity);
+                        //// https://github.com/fhrn71/IdentityServer4Demo/blob/master/ImageGallery.Client/Startup.cs
+                        //tokenValidatedContext.Principal = new ClaimsPrincipal(newClaimsIdentity);
 
 
                         return Task.CompletedTask;
@@ -96,6 +98,7 @@ namespace ImageGallery.Client
 
                     OnUserInformationReceived = userInformationReceivedContext =>
                     {
+                        userInformationReceivedContext.User.Remove("address");
                         return Task.FromResult(0);
                     }
                 };

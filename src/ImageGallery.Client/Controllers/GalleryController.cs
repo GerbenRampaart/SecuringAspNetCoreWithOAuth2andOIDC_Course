@@ -16,6 +16,7 @@ using System.Diagnostics;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using IdentityModel.Client;
 
 namespace ImageGallery.Client.Controllers
 {
@@ -196,6 +197,28 @@ namespace ImageGallery.Client.Controllers
             {
                 Debug.WriteLine($"Claim type: {claim.Type} - Claim value: {claim.Value}");
             }
+        }
+
+        public async Task<IActionResult> OrderFrame()
+        {
+            var discoveryClient = new DiscoveryClient("https://localhost:44389/");
+            var metaDataResponse = await discoveryClient.GetAsync();
+
+            var userInfoclient = new UserInfoClient(metaDataResponse.UserInfoEndpoint);
+            var accessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
+
+            var response = await userInfoclient.GetAsync(accessToken);
+
+            if(response.IsError)
+            {
+                throw new Exception(
+                    "Problem accessing the UserInfo endpoint",
+                    response.Exception);
+            }
+
+            var address = response.Claims.FirstOrDefault(c => c.Type == "address")?.Value;
+
+            return View(new OrderFrameViewModel(address));
         }
     }
 }
